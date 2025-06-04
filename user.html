@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head><meta charset="UTF-8"><title>특가 상품</title></head>
+<body>
+  <div style="text-align:center">
+    <img id="img" style="width:300px"><br>
+    <h3 id="name"></h3>
+    <p><span id="original"></span> → <strong id="sale"></strong></p>
+    <p>수량: <span id="quantity"></span>개</p>
+    <div id="timer" style="color:red; font-size:20px;"></div>
+  </div>
+
+  <script>
+    fetch("/product")
+      .then(res => res.json())
+      .then(data => {
+        document.getElementById("img").src = data.image;
+        document.getElementById("name").textContent = data.name;
+        document.getElementById("original").textContent = `₩${data.original}`;
+        document.getElementById("sale").textContent = `₩${data.sale}`;
+        document.getElementById("quantity").textContent = data.quantity;
+
+        const [sh, sm] = data.start.split(":").map(Number);
+        const [eh, em] = data.end.split(":").map(Number);
+        const now = new Date();
+        const start = new Date(now.getFullYear(), now.getMonth(), now.getDate(), sh, sm);
+        const end = new Date(now.getFullYear(), now.getMonth(), now.getDate(), eh, em);
+
+        function update() {
+          const now = new Date();
+          if (now >= start && now <= end) {
+            const diff = end - now;
+            const h = String(Math.floor(diff / 3600000)).padStart(2, '0');
+            const m = String(Math.floor((diff % 3600000) / 60000)).padStart(2, '0');
+            const s = String(Math.floor((diff % 60000) / 1000)).padStart(2, '0');
+            document.getElementById("timer").textContent = `남은 시간: ${h}:${m}:${s}`;
+          } else {
+            document.getElementById("timer").textContent = "⏰ 특가 종료";
+          }
+        }
+
+        update();
+        setInterval(update, 1000);
+      });
+  </script>
+</body>
+</html>

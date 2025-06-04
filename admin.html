@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head><meta charset="UTF-8"><title>관리자 설정</title></head>
+<body>
+  <h3>상품 등록</h3>
+  상품명: <input id="name"><br>
+  소비자가: <input id="original"><br>
+  특가가: <input id="sale"><br>
+  수량: <input id="quantity"><br>
+  이미지 URL: <input id="image"><br>
+  시작시간: <input type="time" id="start"><br>
+  종료시간: <input type="time" id="end"><br>
+  <button onclick="submit()">저장</button>
+
+  <script>
+    function submit() {
+      const product = {
+        name: document.getElementById("name").value,
+        original: document.getElementById("original").value,
+        sale: document.getElementById("sale").value,
+        quantity: document.getElementById("quantity").value,
+        image: document.getElementById("image").value,
+        start: document.getElementById("start").value,
+        end: document.getElementById("end").value
+      };
+
+      fetch("/product", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify(product)
+      }).then(res => res.json())
+        .then(data => alert("저장 완료"));
+    }
+  </script>
+</body>
+</html>
