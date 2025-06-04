@@ -1,32 +1,31 @@
-
 <!DOCTYPE html>
-<html>
-<head><title>Admin</title></head>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <title>관리자 페이지</title>
+</head>
 <body>
-  <h1>상품 입력</h1>
-  <input id="name" placeholder="상품명"><br>
-  <input id="price" placeholder="소비자가"><br>
-  <input id="salePrice" placeholder="할인가"><br>
-  <input id="image" placeholder="이미지 URL"><br>
-  <input id="endTime" type="datetime-local"><br>
-  <button onclick="save()">저장</button>
+  <h1>상품 설정</h1>
+  <button onclick="saveProduct()">상품 저장</button>
 
   <script>
-    async function save() {
+    const saveProduct = async () => {
       const data = {
-        name: document.getElementById('name').value,
-        price: document.getElementById('price').value,
-        salePrice: document.getElementById('salePrice').value,
-        image: document.getElementById('image').value,
-        endTime: document.getElementById('endTime').value,
+        name: "까르보나라 스파게티",
+        originalPrice: 9470,
+        discountPrice: 1890,
+        imageUrl: "https://example.com/image.jpg",
+        endTime: "2025-06-04T12:00:00"
       };
-      await fetch('/api/save-product', {
+
+      await fetch('http://localhost:3000/product', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(data),
+        body: JSON.stringify(data)
       });
-      alert('저장 완료!');
-    }
+
+      alert("상품 저장 완료!");
+    };
   </script>
 </body>
 </html>

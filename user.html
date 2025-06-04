@@ -1,26 +1,31 @@
-
 <!DOCTYPE html>
-<html>
-<head><title>Product</title></head>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <title>사용자 페이지</title>
+</head>
 <body>
-  <h1>특가 상품</h1>
-  <div id="product"></div>
+  <h1 id="productName">특가 상품</h1>
+  <img id="productImage" src="" alt="상품 이미지" width="200" /><br />
+  <p>정가: <span id="originalPrice">-</span></p>
+  <p>할인가: <span id="discountPrice">-</span></p>
+  <p>특가 종료 시간: <span id="endTime">-</span></p>
 
   <script>
-    async function loadProduct() {
-      const res = await fetch('/api/get-product');
+    window.addEventListener("DOMContentLoaded", async () => {
+      const res = await fetch('http://localhost:3000/product');
       const data = await res.json();
 
-      document.getElementById('product').innerHTML = `
-        <h2>${data.name}</h2>
-        <img src="${data.image}" width="200" />
-        <p>정가: ${data.price}원</p>
-        <p>할인가: ${data.salePrice}원</p>
-        <p>특가 종료 시간: ${data.endTime}</p>
-      `;
-    }
-
-    loadProduct();
+      if (res.ok) {
+        document.getElementById("productName").textContent = data.name;
+        document.getElementById("originalPrice").textContent = data.originalPrice + "원";
+        document.getElementById("discountPrice").textContent = data.discountPrice + "원";
+        document.getElementById("productImage").src = data.imageUrl;
+        document.getElementById("endTime").textContent = data.endTime;
+      } else {
+        alert(data.message);
+      }
+    });
   </script>
 </body>
 </html>
