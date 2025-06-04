@@ -1,35 +1,31 @@
+
 <!DOCTYPE html>
-<html lang="ko">
-<head><meta charset="UTF-8"><title>관리자 설정</title></head>
+<html>
+<head><title>Admin</title></head>
 <body>
-  <h3>상품 등록</h3>
-  상품명: <input id="name"><br>
-  소비자가: <input id="original"><br>
-  특가가: <input id="sale"><br>
-  수량: <input id="quantity"><br>
-  이미지 URL: <input id="image"><br>
-  시작시간: <input type="time" id="start"><br>
-  종료시간: <input type="time" id="end"><br>
-  <button onclick="submit()">저장</button>
+  <h1>상품 입력</h1>
+  <input id="name" placeholder="상품명"><br>
+  <input id="price" placeholder="소비자가"><br>
+  <input id="salePrice" placeholder="할인가"><br>
+  <input id="image" placeholder="이미지 URL"><br>
+  <input id="endTime" type="datetime-local"><br>
+  <button onclick="save()">저장</button>
 
   <script>
-    function submit() {
-      const product = {
-        name: document.getElementById("name").value,
-        original: document.getElementById("original").value,
-        sale: document.getElementById("sale").value,
-        quantity: document.getElementById("quantity").value,
-        image: document.getElementById("image").value,
-        start: document.getElementById("start").value,
-        end: document.getElementById("end").value
+    async function save() {
+      const data = {
+        name: document.getElementById('name').value,
+        price: document.getElementById('price').value,
+        salePrice: document.getElementById('salePrice').value,
+        image: document.getElementById('image').value,
+        endTime: document.getElementById('endTime').value,
       };
-
-      fetch("/product", {
-        method: "POST",
-        headers: {"Content-Type": "application/json"},
-        body: JSON.stringify(product)
-      }).then(res => res.json())
-        .then(data => alert("저장 완료"));
+      await fetch('/api/save-product', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data),
+      });
+      alert('저장 완료!');
     }
   </script>
 </body>
