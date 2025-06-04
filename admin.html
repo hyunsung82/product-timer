@@ -2,39 +2,36 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8" />
-  <title>관리자 페이지</title>
+  <title>관리자 상품 입력</title>
 </head>
 <body>
-  <h1>상품 설정</h1>
-
-  <label>상품명: <input type="text" id="name" /></label><br />
-  <label>정가: <input type="number" id="originalPrice" /></label><br />
-  <label>할인가: <input type="number" id="discountPrice" /></label><br />
-  <label>이미지 URL: <input type="text" id="imageUrl" /></label><br />
-  <label>특가 종료 시간 (YYYY-MM-DDTHH:MM:SS):<br />
-    <input type="text" id="endTime" placeholder="예: 2025-06-04T12:00:00" /></label><br /><br />
-
-  <button onclick="saveProduct()">상품 저장</button>
+  <h1>상품 정보 입력</h1>
+  <form id="productForm">
+    <label>상품명: <input type="text" id="name" required /></label><br />
+    <label>정가: <input type="number" id="price" required /></label><br />
+    <label>할인가: <input type="number" id="discountPrice" required /></label><br />
+    <label>수량: <input type="number" id="quantity" required /></label><br />
+    <label>이미지 URL: <input type="url" id="imageUrl" required /></label><br />
+    <label>종료 시간: <input type="datetime-local" id="endTime" required /></label><br />
+    <button type="submit">저장</button>
+  </form>
 
   <script>
-    const saveProduct = async () => {
-      const data = {
+    document.getElementById("productForm").addEventListener("submit", function (e) {
+      e.preventDefault();
+
+      const product = {
         name: document.getElementById("name").value,
-        originalPrice: document.getElementById("originalPrice").value,
+        price: document.getElementById("price").value,
         discountPrice: document.getElementById("discountPrice").value,
+        quantity: document.getElementById("quantity").value,
         imageUrl: document.getElementById("imageUrl").value,
-        endTime: document.getElementById("endTime").value
+        endTime: document.getElementById("endTime").value,
       };
 
-      const res = await fetch('http://localhost:3000/product', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(data)
-      });
-
-      const result = await res.json();
-      alert(result.message || "저장 완료!");
-    };
+      localStorage.setItem("productData", JSON.stringify(product));
+      alert("상품이 저장되었습니다!");
+    });
   </script>
 </body>
 </html>
